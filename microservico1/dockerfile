@@ -1,4 +1,5 @@
 FROM openjdk:17
 WORKDIR /app
-COPY target/microservico1-1.0.jar .
+RUN ls -la
+COPY ./target/microservico1-1.0.jar .
 CMD ["java", "-jar", "microservico1-1.0.jar"]
