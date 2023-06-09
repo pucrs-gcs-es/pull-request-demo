@@ -1,0 +1,4 @@
+FROM openjdk:17
+WORKDIR /app
+COPY target/microservico2-1.0.jar .
+CMD ["java", "-jar", "microservico2-1.0.jar"]

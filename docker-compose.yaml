@@ -1,0 +1,15 @@
+version: '3'
+services:
+  microservico1:
+    build:
+      context: ./microservico1
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+  microservico2:
+    build:
+      context: ./microservico2
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8080
+  
