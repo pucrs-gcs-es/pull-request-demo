@@ -1,5 +1,6 @@
 FROM openjdk:17
 WORKDIR /app
+RUN echo Comecando!!!!!
 RUN ls -la
 COPY ./target/microservico1-1.0.jar .
 CMD ["java", "-jar", "microservico1-1.0.jar"]
