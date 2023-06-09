@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 public class CitationCollection {
     private ArrayList<String> citations;
 
-    // Testando o CI
     public CitationCollection() {
         citations = new ArrayList<>();
         citations.add("Don't hold onto things. that require a tight grip.");
