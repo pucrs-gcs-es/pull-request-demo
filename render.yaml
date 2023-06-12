@@ -1,0 +1,53 @@
+services:
+  # A Docker web service
+  - type: web
+    name: microservice1
+    runtime: docker
+    repo: https://github.com/PUCRS-Poli-EngSWII/spring-microservices-demo.git # optional
+    region: oregon # optional (defaults to oregon)
+    plan: standard # optional (defaults to starter instance type)
+    branch: master # optional (defaults to master)
+    rootDir: ./microservice1
+    dockerCommand: ./docker build; ./docker run -p 8080:8080  # optional (defaults to Dockerfile command)
+    numInstances: 1 # optional (defaults to 1)
+    healthCheckPath: /
+    # envVars:
+    #   - key: REDIS_HOST
+    #     fromService:
+    #       type: redis
+    #       name: lightning
+    #       property: host # available properties are listed below
+    #   - key: REDIS_PORT
+    #     fromService:
+    #       type: redis
+    #       name: lightning
+    #       property: port
+    #   - fromGroup: conc-settings
+# databases:
+#   - name: elephant
+#     databaseName: mydb # optional (Render may add a suffix)
+#     user: adrian # optional
+#     ipAllowList: # optional (defaults to allow all)
+#       - source: 203.0.113.4/30
+#         description: office
+#       - source: 198.51.100.1
+#         description: home
+
+#   - name: private database
+#     databaseName: private
+#     ipAllowList: [] # only allow internal connections
+
+
+# envVarGroups:
+#   - name: conc-settings
+#     envVars:
+#       - key: CONCURRENCY
+#         value: 2
+#       - key: SECRET
+#         generateValue: true
+#       - key: USER_PROVIDED_SECRET
+#         sync: false
+#   - name: stripe
+#     envVars:
+#       - key: STRIPE_API_URL
+#         value: https://api.stripe.com/v2
