@@ -13,7 +13,7 @@ services:
           condition: service_started
     build:
       context: ./microservico1
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
       tags: ["microservicedemo", "doiscontainers-1"]
     ports:
       - 443:443
@@ -23,7 +23,7 @@ services:
           condition: service_started
     build:
       context: ./microservico2
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
       tags: ["microservicedemo", "doiscontainers-2"]
     ports:
       - 444:443

@@ -142,17 +142,9 @@ As propriedades e tokens de acesso estão pré-configurados nos arquivos [sonar-
 
 ---
 
-## ☁️ Configurações de Deploy
-
-O projeto também conta com suporte a plataformas de cloud prontas para deploy:
-- **Render:** Configuração definida em [render.yaml](file:///mnt/c/Users/mcmor/Dropbox/M/WSGitLocalNew/%23SpringDemos/springmicroservicesdemo/render.yaml).
-- **Fly.io:** Configuração definida em [fly.toml](file:///mnt/c/Users/mcmor/Dropbox/M/WSGitLocalNew/%23SpringDemos/springmicroservicesdemo/fly.toml).
-
----
-
 ## 🔄 Pipeline CI/CD (GitHub Actions)
 
-A pipeline automatizada do projeto está configurada em [.github/workflows/ci-cd.yml](file:///mnt/c/Users/mcmor/Dropbox/M/WSGitLocalNew/%23SpringDemos/springmicroservicesdemo/.github/workflows/ci-cd.yml) e é acionada em commits nas branches de desenvolvimento, staging e master/main, além de pull requests.
+A pipeline automatizada do projeto está configurada em [.github/workflows/ci-cd.yml](file:///mnt/c/Users/mcmor/Dropbox/M/WSGitLocalNew/#SpringDemos/springmicroservicesdemo/.github/workflows/ci-cd.yml) e é acionada em commits nas branches de desenvolvimento, staging e master/main, além de pull requests.
 
 A pipeline é composta por 3 estágios (Jobs):
 
@@ -174,10 +166,7 @@ graph LR
 
 ### 3. Deploy to Staging (Ambiente de Staging)
 - Acionado automaticamente ao fazer push para a branch `staging`.
-- Realiza o deploy do container do microsserviço 2 no **Fly.io** e notifica o **Render** via webhook de deploy para o microsserviço 1.
-- Executa testes de fumaça (smoke test) utilizando `curl` na URL do ambiente de Staging.
+- Realiza o deploy e inicialização dos microsserviços localmente no GitHub Actions Runner utilizando Docker Compose.
+- Executa testes de fumaça (smoke test) utilizando `curl` nos endpoints locais.
 
-#### 🔑 Secrets Necessárias no GitHub:
-- `FLY_API_TOKEN`: Token de autenticação para deploy no Fly.io.
-- `RENDER_STAGING_DEPLOY_HOOK_URL`: URL do webhook para deploy no Render.
 

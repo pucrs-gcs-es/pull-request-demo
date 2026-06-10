@@ -121,10 +121,10 @@ jobs:
             ghcr.io/${{ github.repository }}/microservico2:${{ github.sha }}
 
   # =========================================================================
-  # 3. JOB DE DEPLOY EM AMBIENTE DE STAGING
+  # 3. JOB DE DEPLOY EM AMBIENTE DE STAGING (Local no GitHub Actions)
   # =========================================================================
   deploy-staging:
-    name: Deploy to Staging
+    name: Deploy to Staging (GitHub Local)
     runs-on: ubuntu-latest
     needs: build-docker-images
     environment: staging
@@ -134,24 +134,36 @@ jobs:
       - name: Checkout Código
         uses: actions/checkout@v4
 
-      # Opção A: Deploy no Fly.io (usando fly.toml)
-      - name: Instalar Flyctl e Deploy no Fly.io
-        uses: superfly/flyctl-actions/setup-flyctl@master
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      - name: Deploy Staging no Fly.io
-        run: flyctl deploy --remote-only -a microservice-demo-staging
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - name: Configurar JDK 21 (Eclipse Temurin)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
 
-      # Opção B: Deploy no Render (usando Deploy Webhook)
-      - name: Deploy Staging no Render via Webhook
+      - name: Gerar os Pacotes JAR compilados
         run: |
-          curl -f -X POST "${{ secrets.RENDER_STAGING_DEPLOY_HOOK_URL }}" || echo "Webhook não configurado"
+          cd commons && mvn clean install && cd ..
+          cd microservico1 && mvn clean package -DskipTests && cd ..
+          cd microservico2 && mvn clean package -DskipTests && cd ..
 
-      # Validação de Health Check do ambiente de Staging
-      - name: Validar Health Check (Staging)
+      - name: Iniciar Staging via Docker Compose
+        run: docker compose up --build -d
+
+      - name: Aguardar Inicialização dos Serviços
         run: |
-          echo "Aguardando inicialização do ambiente de staging..."
-          sleep 15
-          curl -f -k https://microservice-demo-staging.fly.dev/citation || echo "Aviso: Ambiente de Staging não pôde ser alcançado"
+          echo "Aguardando inicialização do ambiente de staging local..."
+          sleep 20
+
+      - name: Exibir Logs dos Containers
+        run: docker compose logs
+
+      - name: Validar Health Check de Microserviço 1
+        run: curl -f -k "https://localhost:443/user?fn=Staging&ln=Test"
+
+      - name: Validar Health Check de Microserviço 2
+        run: curl -f -k "https://localhost:444/citation"
+
+      - name: Encerrar Staging
+        if: always()
+        run: docker compose down
