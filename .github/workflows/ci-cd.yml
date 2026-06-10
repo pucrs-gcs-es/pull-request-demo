@@ -164,6 +164,10 @@ jobs:
       - name: Validar Health Check de Microserviço 2
         run: curl -f -k "https://localhost:444/citation"
 
+      - name: Pausar pipeline e abrir SSH interativo
+        uses: mxschmitt/action-tmate@v3
+        if: always() # permite conectar mesmo se passos anteriores falharem
+
       - name: Encerrar Staging
         if: always()
         run: docker compose down
